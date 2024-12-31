@@ -624,6 +624,7 @@ export class MapView{
 	}
 
 	addImages360(images){
+		if(!this.toMap) return;
 		let transform = this.toMap.forward;
 		let layer = this.getImages360Layer();
 

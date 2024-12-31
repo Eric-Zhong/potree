@@ -6,7 +6,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<title>Potree Viewer</title>
+	<title>富基-三维重建</title>
 
 	<link rel="stylesheet" type="text/css" href="../../build/potree/potree.css">
 	<link rel="stylesheet" type="text/css" href="../../libs/jquery-ui/jquery-ui.min.css">
@@ -28,25 +28,89 @@
 	<script src="../../libs/jstree/jstree.js"></script>
 	<script src="../../build/potree/potree.js"></script>
 	<script src="../../libs/plasio/js/laslaz.js"></script>
-
-
 	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
 		<div id="potree_render_area"
 			style="background-image: url('../../build/potree/resources/images/background.jpg');">
-
 		</div>
 		<div id="potree_sidebar_container"> </div>
 	</div>
 
 	<script type="module">
 
+		let annotations = [
+			{
+				uuid: '992B8581-0F9C-476F-AACB-073B7EBD53EB',
+				title: '自行车棚',
+				description: 'UUID:0151548879855',
+				position: [
+					-6.0524680590629565,
+					4.744929381787777,
+					0.328000027179718,
+				],
+				offset: [
+					0,
+					0,
+					0,
+				],
+				children: [],
+			},
+			{
+				uuid: 'D6B24CE3-C208-4996-A39A-9964E6743381',
+				title: '北门出入口',
+				description: 'UUID:0021548',
+				position: [
+					-7.936468074798583,
+					1.7089293746948258,
+					0.1469999732971191,
+				],
+				offset: [
+					0,
+					0,
+					0,
+				],
+				children: [],
+			},
+			{
+				uuid: 'E7D67313-777C-4C77-8411-EFC641C7AA11',
+				title: '8号楼',
+				description: '<br>',
+				position: [
+					-1.4034671783447266,
+					-2.7340707778930664,
+					22.317000029563907,
+				],
+				offset: [
+					0,
+					0,
+					0,
+				],
+				children: [],
+			},
+			{
+				uuid: '2C7404E5-FF94-4CCA-B069-2AF7DDCEF652',
+				title: '7号楼',
+				description: '<br>',
+				position: [
+					-6.284467697143555,
+					2.2849292755126953,
+					18.891000885009767,
+				],
+				offset: [
+					0,
+					0,
+					0,
+				],
+				children: [],
+			},
+		];
+
 		import * as THREE from "../libs/three.js/build/three.module.js";
 
 		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
 
 		viewer.setEDLEnabled(true);
-		viewer.setFOV(20);
-		viewer.setPointBudget(20_000_000);
+		viewer.setFOV(60);
+		viewer.setPointBudget(50_000_000);
 		viewer.loadSettingsFromURL();
 
 		viewer.loadGUI(() => {
@@ -55,18 +119,45 @@
 			viewer.toggleSidebar();
 		});
 
+		let sceneSG = new Potree.Scene();
+
+		viewer.setScene(sceneSG);
+
 		let url = "../pointclouds/20241230_las_1cm/metadata.json";
 		Potree.loadPointCloud(url).then(e => {
 			let pointcloud = e.pointcloud;
 			let material = pointcloud.material;
 
 			material.activeAttributeName = "rgba";
-			material.size = 1;
+			material.size = 0.8;
 			material.minSize = 0.2;
+			// material.pointSizeType = Potree.PointSizeType.FIXED;
+			// material.pointSizeType = Potree.PointSizeType.ATTENUATED;
 			material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
 
-			viewer.scene.addPointCloud(pointcloud);
-			viewer.fitToScreen();
+			sceneSG.addPointCloud(pointcloud);
+
+			// 添加文字标记
+			for (var index in annotations) {
+				let annotation = annotations[index];
+				let annotationObj = new Potree.Annotation({
+					position: annotation.position,
+					"title": annotation.title,
+				});
+				sceneSG.annotations.add(annotationObj);
+			}
+
+
+			// let camera = { position: { x: 3.39872995968319, y: 13.448338928449322, z: 19.01363173175629 }, yaw: 2.764107315340908, _pitch: -0.8071278826559565, radius: 21.868487717801607, maxPitch: 1.5707963267948966, minPitch: -1.5707963267948966, };
+
+			// JSON.stringify(viewer.scene.view)
+			let cameraJson = '{"position":{"x":3.48155455125853,"y":7.976842948549062,"z":8.92118320053562},"yaw":-3.8498303231600777,"_pitch":-0.7581800379788394,"radius":7.162118153027486,"maxPitch":1.5707963267948966,"minPitch":-1.5707963267948966}';
+			let camera = JSON.parse(cameraJson);
+
+			viewer.scene.view.setView(
+				[camera.position.x, camera.position.y, camera.position.z],
+				[camera.position.x - 10, camera.position.y - 10, camera.position.z - 10],
+			);
 
 			run();
 		});
@@ -86,11 +177,18 @@
 
 			// this file contains coordinates, orientation and filenames of the images:
 			let camera_folder = '../pointclouds/20241230_las_1cm/360_images';
-			Potree.Images360Loader.load(camera_folder, viewer, params).then(images => {
+			let image360 = Potree.Images360Loader.load(camera_folder, viewer, params).then(images => {
+				// 对原始 image360 的位置进行调整
+				let scale = 0.15;
+				for (let img of images.images) {
+					console.log(img);
+					img.mesh.scale.set(scale, scale, scale);
+					img.mesh.material.opacity = 1;
+				}
+				// 向场景中添加 image360 对象
 				viewer.scene.add360Images(images);
 			});
-
-			viewer.mapView.showSources(true);
+			viewer.mapView.showSources(false);
 		}
 
 
