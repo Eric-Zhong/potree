@@ -32,3 +32,7 @@ libs/CesiumUnminified
 /pointclouds/helimap_epalinges
 pointclouds/F
 *.bin
+/pointclouds/20241230_las_1cm/**/*.mp4
+/pointclouds/20241230_las_1cm/**/*.jpg
+/pointclouds/20250105/**/*.mp4
+/pointclouds/20250105/**/*.jpg
