@@ -128,10 +128,8 @@
 					},
 				}
 			];
-
 			// start loading all point clouds asynchronously, get a promise for each one that resolves when it's loaded
 			let promises = pointclouds.map(p => Potree.loadPointCloud(p.url));
-			
 			// now iterate over all promises in order
 			for(let i = 0; i < promises.length; i++){
 
@@ -141,8 +139,6 @@
 				pointclouds[i].callback(pointcloud);
 				viewer.scene.addPointCloud(pointcloud);
 			}
-
-			
 			viewer.scene.view.setView(
 				[589974.341, 231698.397, 986.146],
 				[589851.587, 231428.213, 715.634],

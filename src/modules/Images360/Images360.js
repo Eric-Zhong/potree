@@ -12,17 +12,17 @@ let sgHigh = new THREE.SphereGeometry(1, 128, 128);
 
 // 创建基本材质
 let sm = new THREE.MeshBasicMaterial({
-	side: THREE.BackSide, 
+	side: THREE.BackSide,
 	color: 0xffffff,
 });
 let sphereSignMaterial = new THREE.MeshBasicMaterial({
-	side: THREE.BackSide, 
+	side: THREE.BackSide,
 	color: 0xDBD55D,
 });
 // 创建悬停时的材质
-let smHovered = new THREE.MeshBasicMaterial({ 
-	side: THREE.BackSide, 
-	color: 0xff0000, 
+let smHovered = new THREE.MeshBasicMaterial({
+	side: THREE.BackSide,
+	color: 0xff0000,
 });
 
 // 创建射线投射器
@@ -80,7 +80,8 @@ export class Images360 extends EventDispatcher {
 		elUnfocus.type = "button"; // 设置为按钮
 		elUnfocus.value = "退出全景"; // "unfocus"; // 按钮文本
 		elUnfocus.style.position = "absolute"; // 绝对定位
-		elUnfocus.style.right = "10px"; // 右边距
+		// elUnfocus.style.right = "10px"; // 右边距
+		elUnfocus.style.left = "10px"; // 左边距
 		elUnfocus.style.bottom = "10px"; // 下边距
 		elUnfocus.style.zIndex = "10000"; // 设置层级
 		elUnfocus.style.fontSize = "2em"; // 字体大小
@@ -191,6 +192,13 @@ export class Images360 extends EventDispatcher {
 		this.focusedImage = image360; // 设置聚焦图像
 
 		this.elUnfocus.style.display = ""; // 显示取消聚焦按钮
+
+		// TODO: xuzhong 增加隐藏点云
+		if (this.viewer.scene.pointclouds) {
+			this.viewer.scene.pointclouds.map((pc) => {
+				pc.visible = false;
+			});
+		}
 	}
 
 	// 取消聚焦
@@ -232,6 +240,13 @@ export class Images360 extends EventDispatcher {
 		this.focusedImage = null; // 清除聚焦图像
 
 		this.elUnfocus.style.display = "none"; // 隐藏取消聚焦按钮
+
+		// TODO: xuzhong 增加隐藏点云
+		if (this.viewer.scene.pointclouds) {
+			this.viewer.scene.pointclouds.map((pc) => {
+				pc.visible = true;
+			});
+		}
 	}
 
 	// 加载图像

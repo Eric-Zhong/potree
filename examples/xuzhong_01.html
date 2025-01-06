@@ -116,7 +116,7 @@
 		viewer.loadGUI(() => {
 			viewer.setLanguage('zh');
 			$("#menu_appearance").next().show();
-			viewer.toggleSidebar();
+			// viewer.toggleSidebar();
 		});
 
 		let sceneSG = new Potree.Scene();
@@ -176,7 +176,8 @@
 			};
 
 			// this file contains coordinates, orientation and filenames of the images:
-			let camera_folder = '../pointclouds/20241230_las_1cm/360_images';
+			// let camera_folder = '../pointclouds/20241230_las_1cm/360_images';
+			let camera_folder = '../pointclouds/20250105/360/images';
 			let image360 = Potree.Images360Loader.load(camera_folder, viewer, params).then(images => {
 				// 对原始 image360 的位置进行调整
 				let scale = 0.15;

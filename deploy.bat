@@ -1,0 +1,1 @@
+scp -r ../potree root@8.140.48.78:~/potree
