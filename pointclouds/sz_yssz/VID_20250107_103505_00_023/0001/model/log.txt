@@ -1,0 +1,328 @@
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 0, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 1'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 2'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 6'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 7'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 4'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 8'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 5'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 3'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 9'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 10'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 11'000'000, num points: 1'000'000
+INFO(chunker_countsort_laszip.cpp:176): counting scan.las, first point: 12'000'000, num points: 487'785
+INFO(indexer.cpp:1656): start indexing chunk r02
+filesize: 964'060
+min: -123.77100000000002, -123.84625, -129.53300000000002
+max: -107.00925000000001, -107.08449999999999, -112.77125000000001
+INFO(indexer.cpp:1656): start indexing chunk r03
+filesize: 2'819'639
+min: -123.77100000000002, -123.84625, -112.77125000000001
+max: -107.00925000000001, -107.08449999999999, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r06
+filesize: 16'449'220
+min: -107.00925000000001, -123.84625, -129.53300000000002
+max: -90.247500000000002, -107.08449999999999, -112.77125000000001
+INFO(indexer.cpp:1656): start indexing chunk r072
+filesize: 8'575'877
+min: -107.00925000000001, -115.46537499999999, -112.77125000000001
+max: -98.628375000000005, -107.08449999999999, -104.39037500000001
+INFO(indexer.cpp:1656): start indexing chunk r077
+filesize: 7'274'181
+min: -98.628375000000005, -115.46537499999999, -104.39037500000001
+max: -90.247500000000002, -107.08449999999999, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r073
+filesize: 8'288'981
+min: -107.00925000000001, -115.46537499999999, -104.39037500000001
+max: -98.628375000000005, -107.08449999999999, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r11
+filesize: 911'342
+min: -123.77100000000002, -140.608, -79.247749999999996
+max: -107.00925000000001, -123.84625, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r076
+filesize: 7'774'185
+min: -98.628375000000005, -115.46537499999999, -112.77125000000001
+max: -90.247500000000002, -107.08449999999999, -104.39037500000001
+INFO(indexer.cpp:1656): start indexing chunk r13
+filesize: 13'222'414
+min: -123.77100000000002, -123.84625, -79.247749999999996
+max: -107.00925000000001, -107.08449999999999, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r12
+filesize: 5'203'645
+min: -123.77100000000002, -123.84625, -96.009500000000003
+max: -107.00925000000001, -107.08449999999999, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r15
+filesize: 3'419'317
+min: -107.00925000000001, -140.608, -79.247749999999996
+max: -90.247500000000002, -123.84625, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r162
+filesize: 9'864'759
+min: -107.00925000000001, -115.46537499999999, -96.009500000000003
+max: -98.628375000000005, -107.08449999999999, -87.628625
+INFO(indexer.cpp:1656): start indexing chunk r163
+filesize: 9'292'644
+min: -107.00925000000001, -115.46537499999999, -87.628625
+max: -98.628375000000005, -107.08449999999999, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r166
+filesize: 6'831'797
+min: -98.628375000000005, -115.46537499999999, -96.009500000000003
+max: -90.247500000000002, -107.08449999999999, -87.628625
+INFO(indexer.cpp:1656): start indexing chunk r167
+filesize: 7'675'156
+min: -98.628375000000005, -115.46537499999999, -87.628625
+max: -90.247500000000002, -107.08449999999999, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r171
+filesize: 18'748
+min: -107.00925000000001, -123.84625, -70.866874999999993
+max: -98.628375000000005, -115.46537499999999, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r172
+filesize: 15'632'048
+min: -107.00925000000001, -115.46537499999999, -79.247749999999996
+max: -98.628375000000005, -107.08449999999999, -70.866874999999993
+INFO(indexer.cpp:1656): start indexing chunk r173
+filesize: 14'024'278
+min: -107.00925000000001, -115.46537499999999, -70.866874999999993
+max: -98.628375000000005, -107.08449999999999, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r170
+filesize: 3'128'680
+min: -107.00925000000001, -123.84625, -79.247749999999996
+max: -98.628375000000005, -115.46537499999999, -70.866874999999993
+INFO(indexer.cpp:1699): finished indexing chunk r171
+INFO(indexer.cpp:1656): start indexing chunk r174
+filesize: 4'278'930
+min: -98.628375000000005, -123.84625, -79.247749999999996
+max: -90.247500000000002, -115.46537499999999, -70.866874999999993
+INFO(indexer.cpp:1656): start indexing chunk r175
+filesize: 774
+min: -98.628375000000005, -123.84625, -70.866874999999993
+max: -90.247500000000002, -115.46537499999999, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r176
+filesize: 11'623'717
+min: -98.628375000000005, -115.46537499999999, -79.247749999999996
+max: -90.247500000000002, -107.08449999999999, -70.866874999999993
+INFO(indexer.cpp:1656): start indexing chunk r177
+filesize: 7'561'464
+min: -98.628375000000005, -115.46537499999999, -70.866874999999993
+max: -90.247500000000002, -107.08449999999999, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r20
+filesize: 4'808'604
+min: -123.77100000000002, -107.08449999999999, -129.53300000000002
+max: -107.00925000000001, -90.322749999999985, -112.77125000000001
+INFO(indexer.cpp:1656): start indexing chunk r21
+filesize: 3'890'296
+min: -123.77100000000002, -107.08449999999999, -112.77125000000001
+max: -107.00925000000001, -90.322749999999985, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r240
+filesize: 12'054'921
+min: -107.00925000000001, -107.08449999999999, -129.53300000000002
+max: -98.628375000000005, -98.703624999999988, -121.15212500000001
+INFO(indexer.cpp:1699): finished indexing chunk r175
+INFO(indexer.cpp:1656): start indexing chunk r242
+filesize: 7'805'833
+min: -107.00925000000001, -98.703624999999988, -129.53300000000002
+max: -98.628375000000005, -90.322749999999985, -121.15212500000001
+INFO(indexer.cpp:1656): start indexing chunk r241
+filesize: 24'029'088
+min: -107.00925000000001, -107.08449999999999, -121.15212500000001
+max: -98.628375000000005, -98.703624999999988, -112.77125000000001
+INFO(indexer.cpp:1656): start indexing chunk r243
+filesize: 6'859'274
+min: -107.00925000000001, -98.703624999999988, -121.15212500000001
+max: -98.628375000000005, -90.322749999999985, -112.77125000000001
+INFO(indexer.cpp:1656): start indexing chunk r244
+filesize: 8'671'122
+min: -98.628375000000005, -107.08449999999999, -129.53300000000002
+max: -90.247500000000002, -98.703624999999988, -121.15212500000001
+INFO(indexer.cpp:1656): start indexing chunk r245
+filesize: 16'165'850
+min: -98.628375000000005, -107.08449999999999, -121.15212500000001
+max: -90.247500000000002, -98.703624999999988, -112.77125000000001
+INFO(indexer.cpp:1699): finished indexing chunk r02
+INFO(indexer.cpp:1699): finished indexing chunk r11
+INFO(indexer.cpp:1656): start indexing chunk r247
+filesize: 1'566'017
+min: -98.628375000000005, -98.703624999999988, -121.15212500000001
+max: -90.247500000000002, -90.322749999999985, -112.77125000000001
+INFO(indexer.cpp:1656): start indexing chunk r252
+filesize: 7'983'767
+min: -107.00925000000001, -98.703624999999988, -112.77125000000001
+max: -98.628375000000005, -90.322749999999985, -104.39037500000001
+INFO(indexer.cpp:1656): start indexing chunk r251
+filesize: 18'511'070
+min: -107.00925000000001, -107.08449999999999, -104.39037500000001
+max: -98.628375000000005, -98.703624999999988, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r254
+filesize: 16'727'043
+min: -98.628375000000005, -107.08449999999999, -112.77125000000001
+max: -90.247500000000002, -98.703624999999988, -104.39037500000001
+INFO(indexer.cpp:1656): start indexing chunk r246
+filesize: 3'544'146
+min: -98.628375000000005, -98.703624999999988, -129.53300000000002
+max: -90.247500000000002, -90.322749999999985, -121.15212500000001
+INFO(indexer.cpp:1656): start indexing chunk r253
+filesize: 7'018'718
+min: -107.00925000000001, -98.703624999999988, -104.39037500000001
+max: -98.628375000000005, -90.322749999999985, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r250
+filesize: 20'824'255
+min: -107.00925000000001, -107.08449999999999, -112.77125000000001
+max: -98.628375000000005, -98.703624999999988, -104.39037500000001
+INFO(indexer.cpp:1699): finished indexing chunk r03
+INFO(indexer.cpp:1656): start indexing chunk r255
+filesize: 12'641'097
+min: -98.628375000000005, -107.08449999999999, -104.39037500000001
+max: -90.247500000000002, -98.703624999999988, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r256
+filesize: 1'900'514
+min: -98.628375000000005, -98.703624999999988, -112.77125000000001
+max: -90.247500000000002, -90.322749999999985, -104.39037500000001
+INFO(indexer.cpp:1699): finished indexing chunk r15
+INFO(indexer.cpp:1699): finished indexing chunk r170
+INFO(indexer.cpp:1656): start indexing chunk r257
+filesize: 2'008'487
+min: -98.628375000000005, -98.703624999999988, -104.39037500000001
+max: -90.247500000000002, -90.322749999999985, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r30
+filesize: 6'343'317
+min: -123.77100000000002, -107.08449999999999, -96.009500000000003
+max: -107.00925000000001, -90.322749999999985, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r31
+filesize: 3'440'301
+min: -123.77100000000002, -107.08449999999999, -79.247749999999996
+max: -107.00925000000001, -90.322749999999985, -62.48599999999999
+INFO(indexer.cpp:1699): finished indexing chunk r247
+INFO(indexer.cpp:1699): finished indexing chunk r21
+INFO(indexer.cpp:1699): finished indexing chunk r174
+INFO(indexer.cpp:1699): finished indexing chunk r12
+INFO(indexer.cpp:1699): finished indexing chunk r256
+INFO(indexer.cpp:1656): start indexing chunk r341
+filesize: 16'100'834
+min: -107.00925000000001, -107.08449999999999, -87.628625
+max: -98.628375000000005, -98.703624999999988, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r340
+filesize: 16'452'359
+min: -107.00925000000001, -107.08449999999999, -96.009500000000003
+max: -98.628375000000005, -98.703624999999988, -87.628625
+INFO(indexer.cpp:1699): finished indexing chunk r257
+INFO(indexer.cpp:1656): start indexing chunk r342
+filesize: 7'382'885
+min: -107.00925000000001, -98.703624999999988, -96.009500000000003
+max: -98.628375000000005, -90.322749999999985, -87.628625
+INFO(indexer.cpp:1699): finished indexing chunk r31
+INFO(indexer.cpp:1699): finished indexing chunk r20
+INFO(indexer.cpp:1699): finished indexing chunk r246
+INFO(indexer.cpp:1656): start indexing chunk r344
+filesize: 10'571'292
+min: -98.628375000000005, -107.08449999999999, -96.009500000000003
+max: -90.247500000000002, -98.703624999999988, -87.628625
+INFO(indexer.cpp:1656): start indexing chunk r343
+filesize: 8'970'488
+min: -107.00925000000001, -98.703624999999988, -87.628625
+max: -98.628375000000005, -90.322749999999985, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r345
+filesize: 11'589'575
+min: -98.628375000000005, -107.08449999999999, -87.628625
+max: -90.247500000000002, -98.703624999999988, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r346
+filesize: 2'314'862
+min: -98.628375000000005, -98.703624999999988, -96.009500000000003
+max: -90.247500000000002, -90.322749999999985, -87.628625
+INFO(indexer.cpp:1656): start indexing chunk r347
+filesize: 4'316'168
+min: -98.628375000000005, -98.703624999999988, -87.628625
+max: -90.247500000000002, -90.322749999999985, -79.247749999999996
+INFO(indexer.cpp:1656): start indexing chunk r350
+filesize: 18'465'060
+min: -107.00925000000001, -107.08449999999999, -79.247749999999996
+max: -98.628375000000005, -98.703624999999988, -70.866874999999993
+INFO(indexer.cpp:1699): finished indexing chunk r346
+INFO(indexer.cpp:1656): start indexing chunk r351
+filesize: 15'508'638
+min: -107.00925000000001, -107.08449999999999, -70.866874999999993
+max: -98.628375000000005, -98.703624999999988, -62.48599999999999
+INFO(indexer.cpp:1699): finished indexing chunk r177
+INFO(indexer.cpp:1699): finished indexing chunk r30
+INFO(indexer.cpp:1699): finished indexing chunk r347
+INFO(indexer.cpp:1699): finished indexing chunk r167
+INFO(indexer.cpp:1656): start indexing chunk r352
+filesize: 10'552'888
+min: -107.00925000000001, -98.703624999999988, -79.247749999999996
+max: -98.628375000000005, -90.322749999999985, -70.866874999999993
+INFO(indexer.cpp:1656): start indexing chunk r353
+filesize: 8'955'180
+min: -107.00925000000001, -98.703624999999988, -70.866874999999993
+max: -98.628375000000005, -90.322749999999985, -62.48599999999999
+INFO(indexer.cpp:1699): finished indexing chunk r252
+INFO(indexer.cpp:1656): start indexing chunk r355
+filesize: 11'231'944
+min: -98.628375000000005, -107.08449999999999, -70.866874999999993
+max: -90.247500000000002, -98.703624999999988, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r354
+filesize: 10'136'519
+min: -98.628375000000005, -107.08449999999999, -79.247749999999996
+max: -90.247500000000002, -98.703624999999988, -70.866874999999993
+INFO(indexer.cpp:1699): finished indexing chunk r163
+INFO(indexer.cpp:1699): finished indexing chunk r073
+INFO(indexer.cpp:1699): finished indexing chunk r077
+INFO(indexer.cpp:1699): finished indexing chunk r166
+INFO(indexer.cpp:1699): finished indexing chunk r072
+INFO(indexer.cpp:1699): finished indexing chunk r253
+INFO(indexer.cpp:1656): start indexing chunk r357
+filesize: 6'857'597
+min: -98.628375000000005, -98.703624999999988, -70.866874999999993
+max: -90.247500000000002, -90.322749999999985, -62.48599999999999
+INFO(indexer.cpp:1656): start indexing chunk r356
+filesize: 6'691'875
+min: -98.628375000000005, -98.703624999999988, -79.247749999999996
+max: -90.247500000000002, -90.322749999999985, -70.866874999999993
+INFO(indexer.cpp:1656): start indexing chunk r4
+filesize: 2'488'453
+min: -90.247500000000002, -140.608, -129.53300000000002
+max: -56.72399999999999, -107.08449999999999, -96.009500000000003
+INFO(indexer.cpp:1699): finished indexing chunk r243
+INFO(indexer.cpp:1656): start indexing chunk r5
+filesize: 3'524'065
+min: -90.247500000000002, -140.608, -96.009500000000003
+max: -56.72399999999999, -107.08449999999999, -62.48599999999999
+INFO(indexer.cpp:1699): finished indexing chunk r076
+INFO(indexer.cpp:1656): start indexing chunk r6
+filesize: 8'750'973
+min: -90.247500000000002, -107.08449999999999, -129.53300000000002
+max: -56.72399999999999, -73.560999999999979, -96.009500000000003
+INFO(indexer.cpp:1656): start indexing chunk r7
+filesize: 4'483'524
+min: -90.247500000000002, -107.08449999999999, -96.009500000000003
+max: -56.72399999999999, -73.560999999999979, -62.48599999999999
+INFO(indexer.cpp:1699): finished indexing chunk r162
+INFO(indexer.cpp:1699): finished indexing chunk r242
+INFO(indexer.cpp:1699): finished indexing chunk r4
+INFO(indexer.cpp:1699): finished indexing chunk r5
+INFO(indexer.cpp:1699): finished indexing chunk r342
+INFO(indexer.cpp:1699): finished indexing chunk r244
+INFO(indexer.cpp:1699): finished indexing chunk r7
+INFO(indexer.cpp:1699): finished indexing chunk r173
+INFO(indexer.cpp:1699): finished indexing chunk r344
+INFO(indexer.cpp:1699): finished indexing chunk r176
+INFO(indexer.cpp:1699): finished indexing chunk r240
+INFO(indexer.cpp:1699): finished indexing chunk r343
+INFO(indexer.cpp:1699): finished indexing chunk r13
+INFO(indexer.cpp:1699): finished indexing chunk r356
+INFO(indexer.cpp:1699): finished indexing chunk r353
+INFO(indexer.cpp:1699): finished indexing chunk r357
+INFO(indexer.cpp:1699): finished indexing chunk r6
+INFO(indexer.cpp:1699): finished indexing chunk r255
+INFO(indexer.cpp:1699): finished indexing chunk r354
+INFO(indexer.cpp:1699): finished indexing chunk r352
+INFO(indexer.cpp:1699): finished indexing chunk r345
+INFO(indexer.cpp:1699): finished indexing chunk r172
+INFO(indexer.cpp:1699): finished indexing chunk r355
+INFO(indexer.cpp:1699): finished indexing chunk r245
+INFO(indexer.cpp:1699): finished indexing chunk r06
+INFO(indexer.cpp:1699): finished indexing chunk r341
+INFO(indexer.cpp:1699): finished indexing chunk r254
+INFO(indexer.cpp:1699): finished indexing chunk r351
+INFO(indexer.cpp:1699): finished indexing chunk r340
+INFO(indexer.cpp:1699): finished indexing chunk r251
+INFO(indexer.cpp:1699): finished indexing chunk r350
+INFO(indexer.cpp:1699): finished indexing chunk r250
+INFO(indexer.cpp:1699): finished indexing chunk r241

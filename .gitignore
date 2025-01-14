@@ -36,3 +36,8 @@ pointclouds/F
 /pointclouds/20241230_las_1cm/**/*.jpg
 /pointclouds/20250105/**/*.mp4
 /pointclouds/20250105/**/*.jpg
+pointclouds/sz_*/**/*.jpg
+pointclouds/sz_*/**/*.hrc
+pointclouds/sz_*/**/*.las
+pointclouds/sz_*/**/*.log.txt
+viewer/

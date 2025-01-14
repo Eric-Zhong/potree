@@ -170,6 +170,17 @@ export function loadPointCloud(path, name, callback){
 					resolve({type: 'pointcloud_loaded', pointcloud: pointcloud});
 				}
 			});
+		}  else if (path.indexOf('cloud.json') > 0) {
+			POCLoader.load(path, function (geometry) {
+				if (!geometry) {
+					//callback({type: 'loading_failed'});
+					console.error(new Error(`failed to load point cloud from URL: ${path}`));
+				} else {
+					let pointcloud = new PointCloudOctree(geometry);
+					// loaded(pointcloud);
+					resolve({type: 'pointcloud_loaded', pointcloud: pointcloud});
+				}
+			});
 		} else if (path.indexOf('metadata.json') > 0) {
 			Potree.OctreeLoader.load(path).then(e => {
 				let geometry = e.geometry;

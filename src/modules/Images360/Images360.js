@@ -35,6 +35,7 @@ let previousView = {
 	controls: null,
 	position: null,
 	target: null,
+	pointcloud_visible: {},
 };
 
 // 定义360度图像类
@@ -137,11 +138,18 @@ export class Images360 extends EventDispatcher {
 			this.unfocus(); // 如果已有聚焦图像，取消聚焦
 		}
 
+		// 点云的显示状态
+		let pointcloud_visible_status = {};
+		this.viewer.scene.pointclouds.map((pc)=>{
+			pointcloud_visible_status[pc.name] = pc.visible;
+		});
+
 		// 保存当前视图状态
 		previousView = {
 			controls: this.viewer.controls,
 			position: this.viewer.scene.view.position.clone(),
 			target: viewer.scene.view.getPivot(),
+			pointcloud_visible: pointcloud_visible_status,
 		};
 
 		this.viewer.setControls(this.viewer.orbitControls); // 设置控制器
@@ -241,10 +249,10 @@ export class Images360 extends EventDispatcher {
 
 		this.elUnfocus.style.display = "none"; // 隐藏取消聚焦按钮
 
-		// TODO: xuzhong 增加隐藏点云
+		// TODO: xuzhong 恢复显示点云
 		if (this.viewer.scene.pointclouds) {
 			this.viewer.scene.pointclouds.map((pc) => {
-				pc.visible = true;
+				pc.visible = previousView.pointcloud_visible[pc.name];
 			});
 		}
 	}
@@ -352,6 +360,113 @@ export class Images360Loader {
 		return images360; // 返回图像实例
 	}
 
+	static async load_OmegaPhiKappa(url, viewer, params = {}) {
+		if (!params.transform) {
+			params.transform = {
+				forward: a => a, // 默认变换函数
+			};
+		}
+
+		let response = await fetch(`${url}/coordinates.txt`); // 获取坐标文件
+		let text = await response.text(); // 读取文本内容
+
+		let lines = text.split(/\r?\n/); // 按行分割
+		let coordinateLines = lines.slice(2); // 获取坐标行
+
+		let images360 = new Images360(viewer); // 创建360度图像实例
+
+		for (let line of coordinateLines) {
+			if (line.trim().length === 0) {
+				continue; // 跳过空行
+			}
+
+			let tokens = line.split(/\t/); // 按制表符分割行
+			let [PhotoID, X, Y, Z, Omega, Phi, Kappa, r11, r12, r13, r21, r22, r23, r31, r32, r33] = tokens; // 解构参数
+
+			let frame = PhotoID.slice(-6);
+			let _time_ = parseFloat(frame) / 24;
+
+			let [filename, time, long, lat, alt, course, pitch, roll] = [PhotoID + '.jpg', _time_, X, Y, Z, Omega, Phi, Kappa]; // 解构参数
+
+			time = parseFloat(time); // 转换时间为浮点数
+			long = parseFloat(long); // 转换经度为浮点数
+			lat = parseFloat(lat); // 转换纬度为浮点数
+			alt = parseFloat(alt); // 转换高度为浮点数
+			course = parseFloat(course); // 转换航向为浮点数
+			pitch = parseFloat(pitch); // 转换俯仰为浮点数
+			roll = parseFloat(roll); // 转换翻滚为浮点数
+
+			filename = filename.replace(/"/g, ""); // 去除文件名中的引号
+			let file = `${url}/${filename}`; // 构建文件路径
+
+			let image360 = new Image360(file, time, long, lat, alt, course, pitch, roll); // 创建图像实例
+
+			let xy = params.transform.forward([long, lat]); // 转换坐标
+			let position = [...xy, alt]; // 构建位置数组
+			image360.position = position; // 设置图像位置
+
+			images360.images.push(image360); // 将图像添加到数组
+		}
+
+		Images360Loader.createSceneNodes(images360, params.transform); // 创建场景节点
+
+		return images360; // 返回图像实例
+	}
+	
+	static async load_dataframe(url, viewer, params = {}) {
+		if (!params.transform) {
+			params.transform = {
+				forward: a => a, // 默认变换函数
+			};
+		}
+
+		let response = await fetch(`${url}`); // 获取坐标文件
+		let text = await response.text(); // 读取文本内容
+
+		let lines = text.split(/\r?\n/); // 按行分割
+		let coordinateLines = lines.slice(1); // 获取坐标行
+
+		let images360 = new Images360(viewer); // 创建360度图像实例
+
+		for (let line of coordinateLines) {
+			if (line.trim().length === 0) {
+				continue; // 跳过空行
+			}
+
+			let tokens = line.split(','); // 按制表符分割行
+			let [PhotoID, X, Y, Z, Omega, Phi, Kappa, r11, r12, r13, r21, r22, r23, r31, r32, r33] = tokens; // 解构参数
+
+			// PhotoID = `VID_20250107_103505_00_023.mp4.${frame}.0000`
+			let frame = PhotoID.slice(-10, -4); // 提取结尾处的 000000
+			let _time_ = parseFloat(frame) / 24;
+
+			let [filename, time, long, lat, alt, course, pitch, roll] = [PhotoID + '.jpg', _time_, X, Y, Z, Omega, Phi, Kappa]; // 解构参数
+
+			time = parseFloat(time); // 转换时间为浮点数
+			long = parseFloat(long); // 转换经度为浮点数
+			lat = parseFloat(lat); // 转换纬度为浮点数
+			alt = parseFloat(alt); // 转换高度为浮点数
+			course = parseFloat(course); // 转换航向为浮点数
+			pitch = parseFloat(pitch); // 转换俯仰为浮点数
+			roll = parseFloat(roll); // 转换翻滚为浮点数
+
+			filename = filename.replace(/"/g, ""); // 去除文件名中的引号
+			let file = `${url}/${filename}`; // 构建文件路径
+
+			let image360 = new Image360(file, time, long, lat, alt, course, pitch, roll); // 创建图像实例
+
+			let xy = params.transform.forward([long, lat]); // 转换坐标
+			let position = [...xy, alt]; // 构建位置数组
+			image360.position = position; // 设置图像位置
+
+			images360.images.push(image360); // 将图像添加到数组
+		}
+
+		Images360Loader.createSceneNodes(images360, params.transform); // 创建场景节点
+
+		return images360; // 返回图像实例
+	}
+	
 	static createSceneNodes(images360, transform) {
 		for (let image360 of images360.images) {
 			let { longitude, latitude, altitude } = image360; // 解构图像属性

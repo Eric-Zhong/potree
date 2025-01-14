@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>滢水山庄</title>
+    <link rel="stylesheet" type="text/css" href="../../build/potree/potree.css">
+    <link rel="stylesheet" type="text/css" href="../../libs/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../libs/openlayers3/ol.css">
+    <link rel="stylesheet" type="text/css" href="../../libs/spectrum/spectrum.css">
+    <link rel="stylesheet" type="text/css" href="../../libs/jstree/themes/mixed/style.css">
+</head>
+
+<body>
+    <script src="../../libs/jquery/jquery-3.1.1.min.js"></script>
+    <script src="../../libs/jquery-ui/jquery-ui.min.js"></script>
+    <script type="module">
+        window.tempArrayStatus = {};
+        // 常量，是否有跨域
+        let condition = '父页面与iframe域名(不)相同';
+
+        // iframe
+        const viewer = document.getElementById('viewerIFrame');
+
+        function clearPoints() {
+            // 清空位置点
+            if (condition === '父页面与iframe域名相同') {
+                const event = new CustomEvent('cleanImagePoints');
+                viewer.contentWindow.dispatchEvent(event);
+            } else {
+                viewer.contentWindow.postMessage({ action: 'cleanImagePoints' }, '*');
+            }
+        }
+        window.clearPoints = clearPoints;
+
+        function addOrRemovePoint(e, time, image, name, color) {
+
+            // 添加图片显示位置点参数
+            let data = {
+                time: time, // 时间（格式：mmss 或 mm:ss）
+                image: image, // 图片 url
+                name: name ?? time, // 显示名称
+                color: color ?? 0xff0000,
+            };
+            // 摄像机位置 offset 中为 xyz 轴的偏移量
+            const flyto = {
+                time: time,
+                offset: { x: 0, y: 0, z: 30 },
+            };
+
+            // 根据每个点击状态，切换执行 添加/移除 图片位置点
+            if (!tempArrayStatus[data.name]) {
+                // 页面显示设置
+                tempArrayStatus[data.name] = true;
+                e.innerText = '【隐藏】照片(' + time + ')位置';
+                e.style = 'background-color: red;';
+
+                if (condition === '父页面与iframe域名相同') {
+                    // ---------------- 没有跨域时使用下面的方法 -------------------
+                    // 添加位置点
+                    const event = new CustomEvent('addImagePoint', { detail: data });
+                    viewer.contentWindow.dispatchEvent(event);
+
+                    // 显示定义到位置点（俯视）
+                    // const event2 = new CustomEvent('flyToImagePoint', {
+                    //     detail: flyto,
+                    // });
+                    // viewer.contentWindow.dispatchEvent(event2);
+                } else {
+                    // ---------------- 跨域时使用下面的方法 -------------------
+                    // 传递参数对象中增加 action 属性
+                    data.action = 'addImagePoint';
+                    flyto.action = 'flyToImagePoint';
+                    // 添加位置点
+                    viewer.contentWindow.postMessage(data, '*');
+                    // 显示定义到位置点（俯视）
+                    // viewer.contentWindow.postMessage(flyto, '*');
+                }
+            } else {
+                // 页面显示设置
+                tempArrayStatus[data.name] = false;
+                e.innerText = '【显示】照片(' + time + ')位置';
+                e.style = 'background-color: none;';
+
+                // 移除位置点
+                const event = new CustomEvent('removeImagePoint', { detail: data });
+                viewer.contentWindow.dispatchEvent(event);
+
+                // ---------------- 跨域时使用下面的方法 -------------------
+                data.action = 'removeImagePoint';
+                viewer.contentWindow.postMessage(data, '*');
+            }
+        }
+        window.addOrRemovePoint = addOrRemovePoint;
+
+        // JQuery 对话框
+        $("#dialog").dialog({
+            autoOpen: false, // 默认不自动打开
+            modal: true, // 创建模态对话框
+            width: 800, // 设置对话框宽度
+            height: 600 // 设置对话框高度        
+        });
+
+        // #######################################################################
+        // 监听在Viewer点击标记点事件 (非跨域时可用)
+        window.addEventListener('onClickImagePoint', (event) => {
+            handleOnClickImagePoint(event.detail);
+        });
+
+        function handleOnClickImagePoint(data) {
+            console.log('在3D Viewer中点击了', data);
+            /*
+            event.detail 的内容为 addImagePoint 时的输入参数
+            let data = {
+                time: time, // 时间（格式：mmss 或 mm:ss）
+                image: image, // 图片 url
+                name: name ?? time, // 显示名称
+            };
+            */
+            // alert('用你传入的 image url "' + data.image + '" 显示2D照片');
+            $("#img").attr('src', data.image);
+            $("#name").text('名称：' + data.name);
+            $("#dialog").dialog("open");
+        }
+
+        function handleGetViewSetting(view){
+            const viewJson = JSON.stringify(view);
+            // 显示出来
+            $("#camera").text(viewJson);
+        }
+
+        // 监听在Viewer点击标记点事件 (是跨域时可用)
+        window.addEventListener('message', (event) => {
+            const data = event.data;
+            const action = data.action;
+            switch (action) {
+                case 'onClickImagePoint':
+                    handleOnClickImagePoint(data);
+                    break;
+                case 'getViewSetting':
+                    handleGetViewSetting(data.view);
+                    break;
+            }
+        });
+
+        // 获取 viewer 中 camera 当前位置信息
+        function getViewSetting() {
+            // 只实现了跨域方式
+            const event = {
+                action: 'getViewSetting',
+            }
+            viewer.contentWindow.postMessage(event, '*');
+        }
+        window.getViewSetting = getViewSetting;
+
+    </script>
+    <script>
+    </script>
+    <div class="potree_container" style="display: flex; flex-direction: row; width: 100%;">
+        <div style="display: flex; flex-direction: column;">
+            <button
+                onclick="addOrRemovePoint(this, '00:23', 'https://q9.itc.cn/images01/20240202/5bcb531527e64c6cacab9ac9f2517a24.jpeg', '名称', 0x00ffff)">【显示】照片(00:23)位置</button>
+            <button
+                onclick="addOrRemovePoint(this, '00:55', 'https://q6.itc.cn/q_70/images03/20240221/0faa6d71a7fc4e0a98898dbc9f2e0bcb.jpeg', '有缺陷', 0x00ffff)">【显示】照片(00:25)位置</button>
+            <button
+                onclick="addOrRemovePoint(this, '01:12', 'VID_20250107_103505_00_023/0001/360/VID_20250107_103505_00_023.mp4.001728.0112.jpg', null, 0xffff00)">【显示】照片(00:27)位置</button>
+            <button
+                onclick="addOrRemovePoint(this, '01:39', 'VID_20250107_103505_00_023/0001/360/VID_20250107_103505_00_023.mp4.002376.0139.jpg', null)">【显示】照片(00:29)位置</button>
+            <button
+                onclick="addOrRemovePoint(this, '01:59', 'VID_20250107_103505_00_023/0001/360/VID_20250107_103505_00_023.mp4.002856.0159.jpg', '有颜色', 0x0000ff)">【显示】照片(00:32)位置</button>
+            <button
+                onclick="addOrRemovePoint(this, '02:20', 'VID_20250107_103505_00_023/0001/360/VID_20250107_103505_00_023.mp4.003360.0220.jpg', null)">【显示】照片(00:50)位置</button>
+            <button onclick="clearPoints()">清空添加的标记点</button>
+            <button onclick="getViewSetting()">获取 camera 位置信息</button>
+        </div>
+        <div style="width: 800px; height: 600px;">
+            <iframe id="viewerIFrame"
+                src="http://localhost:1234/pointclouds/sz_yssz/VID_20250107_103505_00_023/0001/index.html" height="100%"
+                width="100%"></iframe>
+        </div>
+        <div id="dialog" title="图片查看">
+            <div style="width: 100%;">
+                <h3><span id="name"></span></h3>
+                <img id="img" src="" alt="图片信息" style="width: 100%;" />
+            </div>
+        </div>
+    </div>
+    <div style="width: 100%; background-color: gray; padding: 16px;">
+        <h3>摄像机视角信息</h3>
+        <textarea id="camera" rows="5" style="width: 100%;"></textarea>
+    </div>
+</body>
+
+</html>

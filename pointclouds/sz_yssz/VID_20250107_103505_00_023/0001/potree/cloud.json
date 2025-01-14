@@ -1,0 +1,29 @@
+{
+    "version": "1.7",
+    "octreeDir": "data",
+    "points": 29356241,
+    "boundingBox": {
+        "lx": -66.224575,
+        "ly": -84.311739,
+        "lz": -44.250244,
+        "ux": 68.966514,
+        "uy": 50.879350,
+        "uz": 90.940845
+    },
+    "tightBoundingBox": {
+        "lx": -27.035081,
+        "ly": -42.967967,
+        "lz": -31.647441,
+        "ux": 28.060299,
+        "uy": 10.672135,
+        "uz": 38.272825
+    },
+    "pointAttributes": [
+        "POSITION_CARTESIAN",
+        "COLOR_PACKED",
+        "CLASSIFICATION"
+    ],
+    "spacing": 1.056180,
+    "scale": 0.001000,
+    "hierarchyStepSize": 5
+}

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>友邻公寓</title>
+	<link rel="stylesheet" type="text/css" href="../../build/potree/potree.css">
+	<link rel="stylesheet" type="text/css" href="../../libs/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="../../libs/openlayers3/ol.css">
+	<link rel="stylesheet" type="text/css" href="../../libs/spectrum/spectrum.css">
+	<link rel="stylesheet" type="text/css" href="../../libs/jstree/themes/mixed/style.css">
+</head>
+
+<body>
+	<script src="../../libs/jquery/jquery-3.1.1.min.js"></script>
+	<script src="../../libs/spectrum/spectrum.js"></script>
+	<script src="../../libs/jquery-ui/jquery-ui.min.js"></script>
+	<script src="../../libs/other/BinaryHeap.js"></script>
+	<script src="../../libs/tween/tween.min.js"></script>
+	<script src="../../libs/d3/d3.js"></script>
+	<script src="../../libs/proj4/proj4.js"></script>
+	<script src="../../libs/openlayers3/ol.js"></script>
+	<script src="../../libs/i18next/i18next.js"></script>
+	<script src="../../libs/jstree/jstree.js"></script>
+	<script src="../../build/potree/potree.js"></script>
+	<script src="../../libs/plasio/js/laslaz.js"></script>
+	<script type="module">
+		import * as THREE from "../libs/three.js/build/three.module.js";
+		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
+		viewer.setEDLEnabled(true);
+		viewer.setFOV(60);
+		viewer.setEDLStrength(0);
+		viewer.setPointBudget(50_000_000);
+		viewer.loadSettingsFromURL();
+		viewer.loadGUI(() => {
+			viewer.setLanguage('zh');
+			$("#menu_appearance").next().show();
+			// viewer.toggleSidebar();
+		});
+
+		let sceneSG = new Potree.Scene();
+		viewer.setScene(sceneSG);
+
+		// 当前时间所在位置
+		window.globalData = {
+			playing: false,
+			time_position: null,
+			time_second: 0,
+			time_table: {}, // {'0': {x,y,z}, '1': {x,y,z}, 'n': {x,y,z}, }
+			image_table: {},
+			time_number: 0,
+			time_max: 0,
+			image_360: null,
+			enable_following: true,
+			layer_visible: {},
+		}
+
+		// 轨迹/球
+		let path = [];
+		// let sphere = new THREE.Mesh(
+		// 	new THREE.SphereGeometry(3, 32, 32),
+		// 	new THREE.MeshNormalMaterial()
+		// );
+		let position_sphere = new THREE.Mesh(
+			// {{ edit_1 }}
+			new THREE.BoxGeometry(0.2, 0.2, 3), // 创建一个边长为3的球体
+			new THREE.MeshBasicMaterial({ color: 0xff0000 }) // 设置材质为蓝色
+			// {{ edit_1 }}
+		);
+		viewer.scene.scene.add(position_sphere);
+
+		async function load_base() {
+
+			let pointclouds = [
+				{
+					name: 'pointcloud',
+					url: "../pointclouds/sz_ylgy/0/metadata.json",
+					visible: true,
+					callback: (pointcloud) => {
+						pointcloud.name = "外围";
+						let material = pointcloud.material;
+						material.size = 0.2;
+						material.minSize = 0.02;
+						material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+					},
+				}, {
+					name: 'pointcloud',
+					url: "../pointclouds/sz_ylgy/1/metadata.json",
+					visible: false,
+					callback: (pointcloud) => {
+						pointcloud.name = "地下一层";
+						let material = pointcloud.material;
+						material.size = 0.2;
+						material.minSize = 0.02;
+						material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+					},
+				}, {
+					name: 'pointcloud',
+					url: "../pointclouds/sz_ylgy/2/metadata.json",
+					visible: false,
+					callback: (pointcloud) => {
+						pointcloud.name = "架空层天花";
+						let material = pointcloud.material;
+						material.size = 0.2;
+						material.minSize = 0.02;
+						material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+					},
+				}, {
+					name: 'pointcloud',
+					url: "../pointclouds/sz_ylgy/3/metadata.json",
+					visible: true,
+					callback: (pointcloud) => {
+						pointcloud.name = "架空层地面";
+						let material = pointcloud.material;
+						material.size = 0.2;
+						material.minSize = 0.02;
+						material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+					},
+				}, {
+					name: 'pointcloud',
+					url: "../pointclouds/sz_ylgy/4/metadata.json",
+					visible: true,
+					callback: (pointcloud) => {
+						pointcloud.name = "架空层";
+						let material = pointcloud.material;
+						material.size = 0.2;
+						material.minSize = 0.02;
+						material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+					},
+				}, {
+					name: 'pointcloud',
+					url: "../pointclouds/sz_ylgy/5/metadata.json",
+					visible: false,
+					callback: (pointcloud) => {
+						pointcloud.name = "架空层上";
+						let material = pointcloud.material;
+						material.size = 0.2;
+						material.minSize = 0.02;
+						material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+					},
+				}, {
+					name: 'pointcloud',
+					url: "../pointclouds/sz_ylgy/6/metadata.json",
+					visible: false,
+					callback: (pointcloud) => {
+						pointcloud.name = "公寓楼层";
+						let material = pointcloud.material;
+						material.size = 0.2;
+						material.minSize = 0.02;
+						material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+					},
+				},
+			];
+
+			// 记录显示状态
+			pointclouds.map((layer)=>{
+				window.globalData.layer_visible[layer.name] = layer.visible;
+			});
+			
+			// 并行加载
+			let promises = pointclouds.map(p => Potree.loadPointCloud(p.url));
+
+			for (let i = 0; i < promises.length; i++) {
+				// wait until this point cloud is loaded before processing the next one
+				let pointcloud = (await promises[i]).pointcloud;
+				let setting = pointclouds[i];
+				setting.callback(pointcloud);
+
+				viewer.scene.addPointCloud(pointcloud);
+
+				pointcloud.visible = setting.visible;
+
+				// 控制要不要显示
+
+			}
+
+			// viewer.fitToScreen(0.2);
+
+			// var camera = viewer.scene.getActiveCamera();
+			// camera.position.copy({x: -59.15735776296091, y: -14.284050634153772, z: 46.00792744438339, isVector3: true});
+			// camera.target.copy(storedTarget);
+			// camera.up.copy({x: 0, y: 0, z: 1, isVector3: true});
+			// viewer.update();
+
+			const camera = JSON.parse('{"position":{"x":-62.299830146446176,"y":-2.1294692146010235,"z":39.997072158897254},"yaw":-0.9333518366025492,"_pitch":-0.34624472424400954,"radius":100.44243657532994,"maxPitch":1.5707963267948966,"minPitch":-1.5707963267948966}');
+
+			// default camera position
+			viewer.scene.view.setView(
+				[camera.position.x, camera.position.y, camera.position.z],
+				[camera.position.x + 10, camera.position.y + 8, camera.position.z - 4],
+			);
+
+		}
+
+
+		async function load_360() {
+			// // 坐标系转换
+			// proj4.defs("WGS84", "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
+			// proj4.defs("pointcloud", viewer.getProjection());
+			// // let transform = proj4("WGS84", "pointcloud");
+			// let transform = proj4("pointcloud", "pointcloud");
+
+			// 不需要转换
+			let params = {
+				// transform: transform
+			};
+
+			// this file contains coordinates, orientation and filenames of the images:
+			let camera_folder = '../pointclouds/sz_ylgy/360';
+			let image360 = Potree.Images360Loader.load_OmegaPhiKappa(camera_folder, viewer, params).then(images => {
+				// 对原始 image360 的位置进行调整
+				let scale = 0.1;
+				for (let img of images.images) {
+					console.log(img);
+					img.mesh.scale.set(scale, scale, scale);
+					img.mesh.material.opacity = 1;
+				}
+				// 向场景中添加 image360 对象
+				viewer.scene.add360Images(images);
+
+				if (true) {
+					// 添加轨迹
+					path = images.images.map((v) => {
+						let x = v.longitude;
+						let y = v.latitude;
+						let z = v.altitude;
+						let t = v.time;
+						let vector = [x, y, z];
+						let coordinate = new THREE.Vector3(...vector);
+						window.globalData.time_table[t.toString()] = vector;
+						window.globalData.image_table[t.toString()] = v.file;
+						window.globalData.time_max = t; // 最后一个是最大值
+						return coordinate;
+					});
+
+					// 设置位置标记模型的初始位置
+					window.globalData.image_360 = window.globalData.image_table['0'];
+					const first_poistion = path['0'];
+					if (first_poistion) {
+						let first_vector = [first_poistion.x, first_poistion.y, first_poistion.z];
+						window.globalData.time_position = first_poistion;
+						// position_sphere.position.copy(...first_vector);
+					}
+
+					let animationPath = new Potree.AnimationPath(path);
+					animationPath.closed = false;
+
+					{ // render the path
+						let geometry = animationPath.getGeometry();
+						let material = new THREE.LineBasicMaterial({
+							color: 0x00ff00,
+							linewidth: 1, // 不生效
+						});
+						let line = new THREE.Line(geometry, material, { closed: animationPath.closed });
+						viewer.scene.scene.add(line);
+					}
+
+					// { // render the control points of the path
+					// 	for (let pos of path) {
+					// 		let sg = new THREE.SphereGeometry(0.5, 32, 32);
+					// 		let sm = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+					// 		let s = new THREE.Mesh(sg, sm);
+					// 		s.position.copy(pos);
+					// 		viewer.scene.scene.add(s);
+					// 	}
+					// }
+
+					{ // Animate from beginning to end with a speed of 10 meters per second
+						let start = 0;
+						let end = Infinity;
+						let speed = 5;
+						let animation = animationPath.animate(start, end, speed, t => {
+							animation.repeat = true;
+							// let point = new THREE.Vector3(...target);
+							let current_position = window.globalData.time_position;
+							let ref_position = { ...current_position };
+							ref_position.z += 0;
+							// console.log('move to: ', point, window.globalData.time_number)
+							position_sphere.position.copy(ref_position);
+
+							// 360 image
+							let img360 = window.globalData.image_360;
+							if (img360 && window.globalData.image_360 != imgView.src) {
+								imgView.src = img360;
+							}
+						});
+						window.animation = animation;
+					}
+
+					window.animationPath = animationPath;
+				}
+
+			});
+			viewer.mapView.showSources(false);
+			viewer.fitToScreen(0.2);
+		}
+
+		load_360();
+		load_base();
+
+		const videoPlayer = document.getElementById('videoPlayer');
+		const imgView = document.getElementById('imgView');
+
+		function handleVideoTimeUpdate() {
+			// console.log('当前播放时间: ', videoPlayer.currentTime);
+			const second = Math.floor(videoPlayer.currentTime)
+			const milsecond = videoPlayer.currentTime - second
+
+			window.globalData.time_number = videoPlayer.currentTime;
+			window.globalData.time_second = second;
+
+			// 取对应的360图片
+			window.globalData.image_360 = window.globalData.image_table[second.toString()];
+
+			// 取当前/前一秒的位置
+			let coordinates_begin = window.globalData.time_table[second.toString()];
+			let addition_begin = 0;
+
+			while (true) {
+				let next_second = second - addition_begin;
+				coordinates_begin = window.globalData.time_table[next_second.toString()];
+				if (coordinates_begin) {
+					break;
+				} else {
+					if (next_second - 1 < 0) {
+						break;
+					} else {
+						// continue;
+					}
+				}
+				addition_begin += 1;
+			}
+
+			// 下一秒没找到时，一直往后面找，且不能超出最后视频时间
+			let coordinates_end = null;
+			let addition_end = 0;
+
+			while (true) {
+				addition_end += 1;
+				let next_second = second + addition_end;
+				coordinates_end = window.globalData.time_table[next_second.toString()];
+				if (coordinates_end) {
+					break;
+				} else {
+					if (next_second > window.globalData.time_max) {
+						break;
+					} else {
+						// continue;
+					}
+				}
+			}
+			if (coordinates_begin && coordinates_end) {
+				let x = coordinates_begin[0] + (coordinates_end[0] - coordinates_begin[0]) / (addition_begin + addition_end) * (addition_begin + milsecond)
+				let y = coordinates_begin[1] + (coordinates_end[1] - coordinates_begin[1]) / (addition_begin + addition_end) * (addition_begin + milsecond)
+				let z = coordinates_begin[2] + (coordinates_end[2] - coordinates_begin[2]) / (addition_begin + addition_end) * (addition_begin + milsecond)
+				let vector = [x, y, z];
+				window.globalData.time_position = new THREE.Vector3(...vector);
+
+				// 跟随
+				if (window.globalData.enable_following) {
+					// 设置视角
+					const pre_camera = coordinates_begin;
+					if (pre_camera) {
+						viewer.scene.view.setView(
+							[
+								pre_camera[0] - (coordinates_end[0] - pre_camera[0]) * 10,
+								pre_camera[1] - (coordinates_end[1] - pre_camera[1]) * 10,
+								pre_camera[2] + 40,
+							],
+							coordinates_end,
+						);
+					} else {
+						viewer.scene.view.setView(
+							[pre_camera[0], pre_camera[1], pre_camera[2]],
+						);
+					}
+				}
+			} else {
+				// 算不出来，就不动了
+			}
+		}
+
+		// 获取当前播放时间
+		videoPlayer.addEventListener('timeupdate', () => {
+			handleVideoTimeUpdate();
+		});
+
+		// 监听播放事件
+		videoPlayer.addEventListener('play', () => {
+			// console.log('视频正在播放');
+			window.globalData.playing = true;
+		});
+
+		// 监听暂停事件
+		videoPlayer.addEventListener('pause', () => {
+			// console.log('视频已暂停');
+			window.globalData.playing = false;
+		});
+
+		videoPlayer.addEventListener('seeked', function () {
+			// console.log('用户已拖动进度条，当前时间为：' + videoPlayer.currentTime);
+			handleVideoTimeUpdate();
+		});
+		function onPlayVideo() {
+			const inputButton = document.getElementById('btnPlayVideo');
+			if (videoPlayer.paused) {
+				inputButton.textContent = "暂停播放";
+				videoPlayer.play();
+			} else {
+				inputButton.textContent = "继续播放";
+				videoPlayer.pause();
+			}
+		}
+		window.onPlayVideo = onPlayVideo;
+
+		function onEnter360() {
+		}
+		window.onEnter360 = onEnter360;
+
+		function onChangeModel(e) {
+			// console.log(e.checked);
+			window.globalData.enable_following = e.checked;
+		}
+		window.onChangeModel = onChangeModel;
+	</script>
+	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
+		<div id="potree_render_area"
+			style="background-image: url('../../build/potree/resources/images/background.jpg');">
+		</div>
+		<div
+			style="position: absolute; top: 0px; right: 0px; z-index: 999; width: 300px; height: 100%; background-color: rgba(0, 0, 0, 0.6); color: white; ">
+			<div style="padding-left: 8px;">
+				<span>拍摄视频</span>
+			</div>
+			<div style="background-color: black;">
+				<video id="videoPlayer" width="300" height="300" controls>
+					<source src="../pointclouds/sz_ylgy/mp4/GF.mp4" type="video/mp4">
+				</video>
+				<div style="padding: 0px 0px 16px 16px; text-align: left;">
+					<input type="checkbox" value="1" onchange="onChangeModel(this)" checked><span
+						style="padding: 4px;">跟随摄像机移动</span></input>
+				</div>
+			</div>
+			<!-- <div style="position: absolute; top: 308px; right: 8px; z-index: 999999999;">
+					<button id="btnPlayVideo" onclick="onPlayVideo()">播放视频</button>
+					<button id="btn360View" onclick="onEnter360()">进入全景</button>
+				</div> -->
+			<div style="padding-left: 8px;">
+				<span>图片采样</span>
+			</div>
+			<img id="imgView" src="" onerror="" style="width: 100%;" />
+		</div>
+		<div id="potree_sidebar_container"></div>
+	</div>
+</body>
+
+</html>
