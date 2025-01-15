@@ -424,7 +424,7 @@ export class Images360Loader {
 		let text = await response.text(); // 读取文本内容
 
 		let lines = text.split(/\r?\n/); // 按行分割
-		let coordinateLines = lines.slice(1); // 获取坐标行
+		let coordinateLines = lines.slice(1); // 跳过前面的行
 
 		let images360 = new Images360(viewer); // 创建360度图像实例
 

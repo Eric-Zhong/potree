@@ -41,3 +41,8 @@ pointclouds/sz_*/**/*.hrc
 pointclouds/sz_*/**/*.las
 pointclouds/sz_*/**/*.log.txt
 viewer/
+workspace/01*/*
+workspace/02*/*
+workspace/03*/*
+workspace/04*/*
+workspace/99*/*
