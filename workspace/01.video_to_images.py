@@ -4,7 +4,7 @@ import cv2
 import pandas as pd
 
 
-def generateFrameImageFromVideo(second, frame_start=0, frame_end=0):
+def generateFrameImageFromVideo(second=1, frame_start=0, frame_end=0):
     print("#" * 80)
     print("read video files from video folder")
     print("#" * 80)
@@ -41,18 +41,16 @@ def generateFrameImageFromVideo(second, frame_start=0, frame_end=0):
                 if not os.path.exists(image_folder_path):
                     print(f"{step_no: 04d}: 创建图像文件夹 {image_folder_path}")
                     os.makedirs(image_folder_path)
+                    print(
+                        f"{step_no: 04d}: 开始从视频 {video_file} 按 {second} 秒一帧的方式抽取图像"
+                    )
+                    # 抽帧
+                    video_file_path = os.path.join(root, video_file)
+                    saveFrameImage(video_file_path, image_folder_path, second)
                 else:
                     print(
                         f"视频 {video_file} 已经存在图像序列文件夹 {image_folder_path}，已经跳过"
                     )
-                    break
-
-                print(
-                    f"{step_no: 04d}: 开始从视频 {video_file} 按 {second} 秒一帧的方式抽取图像"
-                )
-                # 抽帧
-                video_file_path = os.path.join(root, video_file)
-                saveFrameImage(video_file_path, image_folder_path, second)
 
 
 def saveFrameImage(video_file, images_dir, second=1, frame_start=0, frame_end=0):
@@ -72,9 +70,8 @@ def saveFrameImage(video_file, images_dir, second=1, frame_start=0, frame_end=0)
         frame_end = total_frames
 
     print(f"\t{step_no: 04d}: 视频信息.文件路径 {video_file}")
-    print(f"\t{step_no: 04d}: 视频信息.帧率 {video_file}")
-    print(f"\t{step_no: 04d}: 视频信息.总帧数 {video_file}")
-    print(f"Video total frames: {total_frames}, rate: {frame_rate}")
+    print(f"\t{step_no: 04d}: 视频信息.帧率 {frame_rate}")
+    print(f"\t{step_no: 04d}: 视频信息.总帧数 {total_frames}")
 
     frame = frame_start
     image_count = 0
@@ -110,7 +107,7 @@ def saveFrameImage(video_file, images_dir, second=1, frame_start=0, frame_end=0)
                 second_display = second_num - minute_num * 60
                 # 保存图像
                 time_index = f"{minute_num:02d}{second_display:02d}"
-                output_fileName = f"{video_file_fullname}.{frame:06d}.{second_num:06d}.{time_index}.jpg"
+                output_fileName = f"{video_file_fullname}.{second_num:06d}.{time_index}.{frame:06d}.jpg"
                 output_path = os.path.join(images_dir, output_fileName)
                 image_count += 1
 
@@ -118,7 +115,7 @@ def saveFrameImage(video_file, images_dir, second=1, frame_start=0, frame_end=0)
                 if pre_frame_condition:
                     pass
                 else:
-                    print("")
+                    print('')
 
                 # 保存图像
                 if os.path.exists(output_path) == False:
@@ -147,19 +144,6 @@ def saveFrameImage(video_file, images_dir, second=1, frame_start=0, frame_end=0)
 
 
 if __name__ == "__main__":
-    # generateFrameImageFromVideo(
-    #     second=1,
-    # )
-
-    # 前30s
     generateFrameImageFromVideo(
         second=0.5,
-        frame_start=0,
-        frame_end=30 * 24,
-    )  # 前 30s
-
-    # 后 30s
-    generateFrameImageFromVideo(
-        second=0.5,
-        frame_start=(180 - 30) * 24,
     )

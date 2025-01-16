@@ -46,3 +46,5 @@ workspace/02*/*
 workspace/03*/*
 workspace/04*/*
 workspace/99*/*
+
+!workspace/99*/template
