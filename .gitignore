@@ -48,3 +48,6 @@ workspace/04*/*
 workspace/99*/*
 
 !workspace/99*/template
+workspace/08.Vedio_Demo/scenes/1/360/video_0000_000000.jpg
+workspace/**/*.jpg
+workspace/**/*.mp4

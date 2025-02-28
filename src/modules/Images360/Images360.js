@@ -371,7 +371,7 @@ export class Images360Loader {
 		let text = await response.text(); // 读取文本内容
 
 		let lines = text.split(/\r?\n/); // 按行分割
-		let coordinateLines = lines.slice(2); // 获取坐标行
+		let coordinateLines = lines.slice(1); // 获取坐标行
 
 		let images360 = new Images360(viewer); // 创建360度图像实例
 
@@ -380,7 +380,7 @@ export class Images360Loader {
 				continue; // 跳过空行
 			}
 
-			let tokens = line.split(/\t/); // 按制表符分割行
+			let tokens = line.split(/[\t,]/); // 按制表符分割行
 			let [PhotoID, X, Y, Z, Omega, Phi, Kappa, r11, r12, r13, r21, r22, r23, r31, r32, r33] = tokens; // 解构参数
 
 			let frame = PhotoID.slice(-6);
@@ -398,13 +398,10 @@ export class Images360Loader {
 
 			filename = filename.replace(/"/g, ""); // 去除文件名中的引号
 			let file = `${url}/${filename}`; // 构建文件路径
-
 			let image360 = new Image360(file, time, long, lat, alt, course, pitch, roll); // 创建图像实例
-
 			let xy = params.transform.forward([long, lat]); // 转换坐标
 			let position = [...xy, alt]; // 构建位置数组
 			image360.position = position; // 设置图像位置
-
 			images360.images.push(image360); // 将图像添加到数组
 		}
 

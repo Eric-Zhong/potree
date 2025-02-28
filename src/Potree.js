@@ -135,7 +135,6 @@ export function loadPointCloud(path, name, callback){
 	};
 
 	let promise = new Promise( resolve => {
-
 		// load pointcloud
 		if (!path){
 			// TODO: callback? comment? Hello? Bueller? Anyone?
