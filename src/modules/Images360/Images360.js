@@ -5,8 +5,9 @@ import { EventDispatcher } from "../../EventDispatcher.js";
 // 导入文本精灵
 import { TextSprite } from "../../TextSprite.js";
 
+// TODO: xz, 用这个修改显示360时的标识体
 // 创建球体几何体
-let sg = new THREE.SphereGeometry(1, 8, 8);
+let sg = new THREE.SphereGeometry(0.2, 8, 8);
 // 创建高分辨率球体几何体
 let sgHigh = new THREE.SphereGeometry(1, 128, 128);
 
@@ -17,7 +18,8 @@ let sm = new THREE.MeshBasicMaterial({
 });
 let sphereSignMaterial = new THREE.MeshBasicMaterial({
 	side: THREE.BackSide,
-	color: 0xDBD55D,
+	// color: 0xDBD55D,
+	color: 0x00ff00,
 });
 // 创建悬停时的材质
 let smHovered = new THREE.MeshBasicMaterial({
