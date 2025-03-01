@@ -33,12 +33,13 @@
 		viewer.setEDLStrength(0);
 		viewer.setPointBudget(5_000_000);
 		viewer.loadSettingsFromURL();
+		viewer.compass.setVisible(true);
 		// 不显示工具栏
-		// viewer.loadGUI(() => {
-		// 	viewer.setLanguage('zh');
-		// 	$("#menu_appearance").next().show();
-		// 	viewer.toggleSidebar();
-		// });
+		viewer.loadGUI(() => {
+			viewer.setLanguage('zh');
+			$("#menu_appearance").next().show();
+			viewer.toggleSidebar();
+		});
 		let sceneSG = new Potree.Scene();
 		viewer.setScene(sceneSG);
 		async function load_model() {
